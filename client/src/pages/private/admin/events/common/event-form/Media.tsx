@@ -9,26 +9,20 @@ function Media({
   existingMediaUrls = [],
   setExistingMediaUrls,
   loading,
-  onFinish,
-  type,
 }: EventFormStepProp) {
-  // Remove a newly added (local File) item
+  // Remove a newly added local file
   const onNewFileRemove = (index: number) => {
     setSelectedMediaFiles((prev: File[]) =>
       prev.filter((_: File, i: number) => i !== index)
     );
   };
 
-  // Remove an already-saved URL (edit mode)
+  // Remove an already-saved URL
   const onExistingUrlRemove = (index: number) => {
     setExistingMediaUrls((prev: string[]) =>
       prev.filter((_: string, i: number) => i !== index)
     );
   };
-
-  const isLastStep = type === undefined || type === "create"
-    ? false
-    : false; // Media is always step 3, Next goes to Tickets
 
   return (
     <div className="flex flex-col gap-5">
@@ -41,11 +35,12 @@ function Media({
         multiple
         showUploadList={false}
       >
-        <span className="text-gray-500 text-xs">Click Here To Upload</span>
+        <span className="text-gray-500 text-xs">
+          Click Here To Upload
+        </span>
       </Upload>
 
       <div className="flex flex-wrap gap-5">
-        {/* Existing saved images from the database (edit mode) */}
         {existingMediaUrls.map((url: string, index: number) => (
           <div
             key={`existing-${index}`}
@@ -65,7 +60,6 @@ function Media({
           </div>
         ))}
 
-        {/* Newly selected local files in this session */}
         {selectedMediaFiles.map((file: File, index: number) => (
           <div
             key={`new-${index}`}
@@ -76,7 +70,9 @@ function Media({
               alt="new media"
               className="w-40 h-40 object-cover"
             />
-            <span className="text-xs text-center text-blue-500">New</span>
+            <span className="text-xs text-center text-blue-500">
+              New
+            </span>
             <span
               className="underline text-sm text-center cursor-pointer text-red-500"
               onClick={() => onNewFileRemove(index)}
