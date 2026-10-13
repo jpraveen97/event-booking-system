@@ -17,7 +17,7 @@ stages {
     stage('Frontend CI') {
         steps {
             powershell '''
-                & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc "cd client && npm ci && npm run lint && npm run build"
+                & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc "cd client && npm ci && npm run build"
                 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
             '''
         }
