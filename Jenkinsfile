@@ -1,7 +1,7 @@
 pipeline {
 agent any
 
-```
+
 options {
     skipDefaultCheckout(true)
     timestamps()
@@ -62,6 +62,6 @@ post {
         echo 'Event Booking System CI failed. Check the stage logs.'
     }
 }
-```
+
 
 }
