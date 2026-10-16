@@ -136,3 +136,5 @@ server/assets/media/*
 # Uncomment if you have large files in docs/
 # docs/videos/
 # docs/screenshots/*.mp4
+# Kubernetes secrets - never commit
+k8s/secret.yaml

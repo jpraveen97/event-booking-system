@@ -27,3 +27,8 @@ spec:
               value: "mongodb://172.17.0.1:27017/EMS"
             - name: FRONTEND_URL
               value: "http://localhost:30080"
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: event-booking-backend-secret
+                  key: JWT_SECRET_KEY
