@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-booking-frontend
+  namespace: event-booking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-booking-frontend
+  template:
+    metadata:
+      labels:
+        app: event-booking-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: jpraveen97/event-booking-system-frontend:latest
+          ports:
+            - containerPort: 80
