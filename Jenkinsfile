@@ -75,7 +75,7 @@ pipeline {
                         & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc 'printf "%s" "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin'
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-                        & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc "docker compose -f compose.yml build"
+                        & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc "docker compose -f compose.yml build --no-cache frontend backend"
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
                         & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc "docker tag event-booking-system-frontend:latest jpraveen97/event-booking-system-frontend:latest && docker tag event-booking-system-backend:latest jpraveen97/event-booking-system-backend:latest && docker push jpraveen97/event-booking-system-frontend:latest && docker push jpraveen97/event-booking-system-backend:latest"
