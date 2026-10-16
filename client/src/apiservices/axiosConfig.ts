@@ -3,7 +3,7 @@ import axios from "axios";
 // Create axios instance with default config
 // Using environment variable for API base URL
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:30500/api",
   withCredentials: true, // This ensures cookies are sent with every request
   headers: {
     "Content-Type": "application/json",
