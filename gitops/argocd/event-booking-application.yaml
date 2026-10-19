@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: event-booking
+  namespace: argocd
+spec:
+  project: event-booking-project
+  source:
+    repoURL: https://github.com/jpraveen97/event-booking-system.git
+    targetRevision: main
+    path: gitops/event-booking
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: event-booking
+  syncPolicy:
+    syncOptions:
+      - Prune=false
