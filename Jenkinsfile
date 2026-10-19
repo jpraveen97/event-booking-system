@@ -33,9 +33,9 @@ pipeline {
                     ) ? 'true' : 'false'
 
                     if (env.GITOPS_ONLY == 'true') {
-                        echo 'GitOps-only commit detected. Skipping CI to prevent a build loop.'
+                        echo 'GitOps-only commit detected. Skipping application CI/CD.'
                     } else {
-                        echo 'Application changes detected. Running CI/CD.'
+                        echo 'Application or Jenkinsfile changes detected. Running CI/CD.'
                     }
                 }
             }
@@ -94,7 +94,7 @@ pipeline {
                             throw 'Docker Hub token binding is empty'
                         }
 
-                        Write-Output 'Docker Hub credential check passed.'
+                        Write-Output 'Docker Hub credential binding check passed.'
                     '''
                 }
             }
@@ -113,28 +113,36 @@ pipeline {
                     powershell '''
                         $imageTag = "build-$env:BUILD_NUMBER"
 
-                        $env:DOCKERHUB_TOKEN |
-                            docker login --username $env:DOCKERHUB_USER --password-stdin
+                        # Authenticate using the previously working Git Bash method.
+                        & "C:\\Program Files\\Git\\usr\\bin\\bash.exe" -lc 'printf "%s" "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin'
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+                        # Rebuild images without using cached build layers.
                         docker compose -f compose.yml build --no-cache frontend backend
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+                        # Add a unique tag for this Jenkins build.
                         docker tag event-booking-system-frontend:latest "jpraveen97/event-booking-system-frontend:$imageTag"
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
                         docker tag event-booking-system-backend:latest "jpraveen97/event-booking-system-backend:$imageTag"
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+                        # Keep the latest tags available too.
                         docker tag event-booking-system-frontend:latest jpraveen97/event-booking-system-frontend:latest
-                        docker tag event-booking-system-backend:latest jpraveen97/event-booking-system-backend:latest
+                        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+                        docker tag event-booking-system-backend:latest jpraveen97/event-booking-system-backend:latest
+                        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+                        # Push the unique tags first.
                         docker push "jpraveen97/event-booking-system-frontend:$imageTag"
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
                         docker push "jpraveen97/event-booking-system-backend:$imageTag"
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+                        # Update the latest tags.
                         docker push jpraveen97/event-booking-system-frontend:latest
                         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
@@ -169,8 +177,8 @@ pipeline {
                     $frontendContent = Get-Content $frontendFile -Raw
                     $backendContent = Get-Content $backendFile -Raw
 
-                    $frontendPattern = '(?m)^(\\s*image:\\s*)jpraveen97/event-booking-system-frontend:\\S+\\s*$'
-                    $backendPattern = '(?m)^(\\s*image:\\s*)jpraveen97/event-booking-system-backend:\\S+\\s*$'
+                    $frontendPattern = '(?m)^([\\s]*image:[\\s]*)jpraveen97/event-booking-system-frontend:[\\S]+[\\s]*$'
+                    $backendPattern = '(?m)^([\\s]*image:[\\s]*)jpraveen97/event-booking-system-backend:[\\S]+[\\s]*$'
 
                     if ([regex]::Matches($frontendContent, $frontendPattern).Count -ne 1) {
                         throw 'Expected exactly one frontend image entry.'
