@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: event-booking-frontend
@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: jpraveen97/event-booking-system-frontend:latest
+          image: jpraveen97/event-booking-system-frontend:build-13
           ports:
             - containerPort: 80
