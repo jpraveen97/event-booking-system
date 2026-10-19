@@ -169,8 +169,8 @@ pipeline {
                     $frontendContent = Get-Content $frontendFile -Raw
                     $backendContent = Get-Content $backendFile -Raw
 
-                    $frontendPattern = '(?m)^(\s*image:\s*)jpraveen97/event-booking-system-frontend:\S+\s*$'
-                    $backendPattern = '(?m)^(\s*image:\s*)jpraveen97/event-booking-system-backend:\S+\s*$'
+                    $frontendPattern = '(?m)^(\\s*image:\\s*)jpraveen97/event-booking-system-frontend:\\S+\\s*$'
+                    $backendPattern = '(?m)^(\\s*image:\\s*)jpraveen97/event-booking-system-backend:\\S+\\s*$'
 
                     if ([regex]::Matches($frontendContent, $frontendPattern).Count -ne 1) {
                         throw 'Expected exactly one frontend image entry.'
