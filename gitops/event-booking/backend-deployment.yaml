@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: jpraveen97/event-booking-system-backend:build-13
+          image: jpraveen97/event-booking-system-backend:build-16
           ports:
             - containerPort: 5000
           env:
@@ -32,3 +32,4 @@ spec:
                 secretKeyRef:
                   name: event-booking-backend-secret
                   key: JWT_SECRET_KEY
+
