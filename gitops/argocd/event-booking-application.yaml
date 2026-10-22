@@ -13,5 +13,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: event-booking
   syncPolicy:
+    automated:
+      prune: false
     syncOptions:
       - Prune=false
